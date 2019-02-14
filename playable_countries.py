@@ -12,12 +12,15 @@ countries = [
     ["Greece","Gorgo"],
     ["Greece","Perciles"],
     ["India","Gandhi"],
+    ["Indonesia","Gitarja"],
     ["Japan","Hojo Tokimune"],
+    ["Khmer","Jayavarman"],
     ["Kongo","Mvemba a Nzinga"],
     ["Macedon","Alexander the Great"],
     ["Norway","Harald Hardrada"],
-    ["Poland","Jadwiga"],
+    ["Nubia","Amanitore"],
     ["Persia","Cyrus II"],
+    ["Poland","Jadwiga"],
     ["Rome","Trajan"],
     ["Russia","Peter"],
     ["Scythia","Tomyris"],
@@ -25,9 +28,40 @@ countries = [
     ["Sumeria","Gilgamesh"]
 ]
 
-def get_countries():
+countries_rise_and_fall = [
+    ["Cree","Poundmaker"],
+    ["The Netherlands(Dutch)","Wilhelmina"],
+    ["Georgia","Tamar"],
+    ["India","Chandragupta"],
+    ["Korea","Seondeok"],
+    ["Mapuche","Lautaro"],
+    ["Mongolia","Genghis Khan"],
+    ["Scottland","Robert the Bruce"],
+    ["Zulu","Shaka"]
+]
+
+countries_global_storm = [
+    ["Canada","Wilfrid Laurier"],
+    ["England","Elanor of Aquitaine"],
+    ["France","Elanor of Aquitaine"],
+    ["Hungary","Matthias Corvinus"],
+    ["Inca","Pachauti"],
+    ["Mali","Mansa Musa"],
+    ["Māori","Kupe"],
+    ["Ottoman","Suleiman"],
+    ["Phonecia","Dido"],
+    ["Sweden","Kristina"]
+]
+
+def get_countries(rise_and_fall=False, global_storm=False, all_expansions=False):
     """
-    provides a multi dimensional list containing all playable countires.
+    Returns a list of the standard countries. Parameters can be set to cherry pick or include all expansion countries
+    Args: rise_and_fall=False, global_storm=False, all_expansions=False
     Returns, list[['country', 'name']]
     """
-    return countries
+    included = countries
+    if rise_and_fall or all_expansions:
+        included.append(countries_rise_and_fall)
+    if global_storm or all_expansions:
+        included.append(countries_global_storm)
+    return included
