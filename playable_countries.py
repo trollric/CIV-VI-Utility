@@ -47,7 +47,7 @@ countries_global_storm = [
     ["Hungary","Matthias Corvinus"],
     ["Inca","Pachauti"],
     ["Mali","Mansa Musa"],
-    ["Māori","Kupe"],
+    ["Maori","Kupe"],
     ["Ottoman","Suleiman"],
     ["Phonecia","Dido"],
     ["Sweden","Kristina"]

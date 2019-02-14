@@ -59,4 +59,19 @@ def print_lineup(players):
 
 players_lineup = assign_countries(players)
 
-print_lineup(players_lineup)
+# Experimenting with GUI
+import tkinter as tk
+from PIL import ImageTk, Image
+
+root = tk.Tk()
+
+logo_img = ImageTk.PhotoImage(Image.open("assets/chandragupta.png"))
+
+w1 = tk.Label(root, image=logo_img)
+w1.pack(side="right")
+explanation = """Chandragupta was a leader of India a long time ago"""
+
+w2 = tk.Label(root, justify=tk.LEFT, padx=10, text=explanation)
+w2.pack(side="left")
+
+root.mainloop()
