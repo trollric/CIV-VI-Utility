@@ -21,25 +21,24 @@ class Player:
         """
         self.countries.append(country)
 
-import playable_countries as pc
-
 
 player_names = ['Marcus', 'Kivi', 'Jacob', 'Smitaah', 'Amanda', 'Embla']
 players = []
-country_pool = pc.get_countries()
 
 # Create the players
 for name in player_names:
     players.append(Player(name))
 
 
-def randomize_countries(players, countries):
+def assign_countries(players):
     """
     Assign each player three possible countries to choose from
     Args: List containing elements of the Player class
     Return: A List of players with randomly assigned countries
     """
     import random as rng
+    import playable_countries as pc
+    countries = pc.get_countries(all_expansions=True)
     for player in players:
         for i in range(3):
             rand = rng.randint(0, len(countries) - 1)
@@ -58,6 +57,6 @@ def print_lineup(players):
         print("\n")
 
 
-randomized_players = randomize_countries(players, country_pool)
+players_lineup = assign_countries(players)
 
-print_lineup(randomized_players)
+print_lineup(players_lineup)

@@ -61,7 +61,9 @@ def get_countries(rise_and_fall=False, global_storm=False, all_expansions=False)
     """
     included = countries
     if rise_and_fall or all_expansions:
-        included.append(countries_rise_and_fall)
+        for e in countries_rise_and_fall:
+            included.append(e)
     if global_storm or all_expansions:
-        included.append(countries_global_storm)
+        for e in countries_global_storm:
+            included.append(e)
     return included
