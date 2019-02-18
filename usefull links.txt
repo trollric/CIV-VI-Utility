@@ -1,2 +1,5 @@
 Tkinter guide
 https://www.python-course.eu/tkinter_labels.php
+
+Tkinter Layout special
+http://zetcode.com/gui/tkinter/layout/

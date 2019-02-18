@@ -14,6 +14,12 @@ class Player:
         """
         return self.countries
 
+    def get_name(self):
+        """
+        Return: self.name (str)
+        """
+        return self.name
+
     def add_country(self, country):
         """
         Adds a country to the players list
@@ -65,67 +71,58 @@ from PIL import ImageTk, Image
 
 root = tk.Tk()
 root.title('Civilization VI Three pool picker')
+root.geometry("710x600")
 root.resizable(0, 1)
-#logo_img = ImageTk.PhotoImage(Image.open("assets/chandragupta.png"))
 
-#w1 = tk.Label(root, image=logo_img)
-#w1.pack(side="right")
-#explanation = """Chandragupta was a leader of India a long time ago"""
 
-#w2 = tk.Label(root, justify=tk.LEFT, padx=10, text=explanation)
-#w2.pack(side="left")
+def post_player_frame(root_frame, player):
+    """
+    Takes a root frame which to add the graphics and a player to draw information from.
+    Args: frame (tkinter.frame), player (player class object)
+    """
+    player_frame = tk.Frame(root_frame)
+    tk.Label(player_frame, text=player.get_name(), anchor=tk.CENTER).grid(row=0, columnspan=3, sticky=tk.W+tk.E)
 
-#b1 = tk.Button(root, text='Stop', width=25, command=root.destroy)
-#b1.pack()
+    img = Image.open("assets/norway.png")
+    img = img.resize((231,231), Image.ANTIALIAS)
+    logo = ImageTk.PhotoImage(img)
 
-# Button frame.
-#frame = tk.Frame(root)
-#frame.pack()
+    i = 0
+    for country in player.get_countries():
+        text = '{0} of {1}'.format(country[1], country[0])
+        tk.Label(player_frame, text=text, relief='ridge', font=('times', 12), width=25).grid(row=1, column=i)
+        img_logo = tk.Label(player_frame, image=logo, relief='ridge', width=231)
+        img_logo.image = logo #Keep the image reference
+        img_logo.grid(row=2, column=i)
+        i += 1
 
-#b2 = tk.Button(frame, text='QUIT', fg='red', bg='white', command=w1.destroy)
-#b2.pack(side=tk.LEFT)
-
-#b3 = tk.Button(frame, text='?', fg='white', bg='red', command=b3.destroy)
-#b3.pack()
-
-#msg = "Whatever you do will be insignificant, but it is very important that you do it. \nMahatma Gandhi"
-#w3 = tk.Message(root, text=msg)
-#w3.config(bg='navy', font=('times', 24, 'italic'),fg='white')
-#w3.pack()
-
-# special label
-#counter = 0
-#def counter_label(label):
-#   counter = 0
-#    def count():
-#        global counter
-#        counter += 1
-#        label.config(text=str(counter))
-#        label.after(1000, count)
-#    count()
+    player_frame.pack(fill=tk.BOTH, expand=True, side=tk.TOP)
 
 
 # Test to create a frame format!
 player_frame = tk.Frame(root)
-player_frame.pack()
+
 
 player_name = "<Player names goes here>"
-country_name = ['Gerogia', 'Canada', 'Netherlands']
 
 img = Image.open("assets/chandragupta.png")
-img = img.resize((100,100), Image.ANTIALIAS)
+img = img.resize((231,231), Image.ANTIALIAS)
 resize_logo = ImageTk.PhotoImage(img)
 
-name_frame = tk.Frame(player_frame, height="32", width="450")
-name_frame.propagate(False)
-name_frame.grid(row=0, column=0)
-tk.Label(name_frame, text=player_name, relief='ridge', font=('times', 12), anchor=tk.CENTER).pack(anchor=tk.CENTER)
+name_label = tk.Label(player_frame, text=player_name, anchor=tk.CENTER)
+name_label.grid(row=0, columnspan=3, sticky=tk.W+tk.E)
+
 i = 0
 for country in players_lineup[0].get_countries():
-    f = tk.Frame(player_frame, height="32", width="150")
-    f.propagate(False)
-    f.grid(row=1, column=i)
     text = '{0} of {1}'.format(country[1], country[0])
-    tk.Label(f, text=text, relief='ridge', font=('times', 12), anchor=tk.CENTER).pack()
+    tk.Label(player_frame, text=text, relief='ridge', font=('times', 12), width=25).grid(row=1, column=i)
+    img_logo = tk.Label(player_frame, image=resize_logo, relief='ridge', width=231)
+    img_logo.image = resize_logo #keep the image reference
+    img_logo.grid(row=2, column=i)
+
     i += 1
+
+player_frame.pack(fill=tk.BOTH, expand=True, side=tk.TOP)
+
+post_player_frame(root, players_lineup[1])
 root.mainloop()
