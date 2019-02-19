@@ -1,5 +1,5 @@
 class Player:
-    def __init__(self,name='unnamed'):
+    def __init__(self, name='unnamed'):
         """
         Creates a new player
         Args: name(str)
@@ -28,7 +28,7 @@ class Player:
         self.countries.append(country)
 
 
-player_names = ['Marcus', 'Kivi', 'Jacob', 'Smitaah', 'Amanda', 'Embla']
+player_names = ['Marcus', 'Kivi', 'Jacob', 'Smitaah', 'Amanda', 'Embla', 'Benevides']
 players = []
 
 # Create the players
@@ -44,7 +44,8 @@ def assign_countries(players):
     """
     import random as rng
     import playable_countries as pc
-    countries = pc.get_countries(all_expansions=True)
+    #countries = pc.get_countries(all_expansions=True)
+    countries = pc.get_countries()
     for player in players:
         for i in range(3):
             rand = rng.randint(0, len(countries) - 1)
@@ -53,45 +54,42 @@ def assign_countries(players):
 
 def print_lineup(players):
     """
-    Takes a list of players and prints their assigned teams
+    Takes a list of players and prints their assigned teams to the terminal/console
     Args: List containing elements of the Player class
     """
     for player in players:
         print('{} will be playing as either:'.format(player.name))
         for country in player.get_countries():
-            print('{0} of {1}'.format(country[1],country[0]))
+            print('{0} of {1}'.format(country["leader"],country["name"]))
         print("\n")
 
 
+# Assign the players three countries each
 players_lineup = assign_countries(players)
-
-# Experimenting with GUI
-import tkinter as tk
-from PIL import ImageTk, Image
-
-root = tk.Tk()
-root.title('Civilization VI Three pool picker')
-root.geometry("710x600")
-root.resizable(0, 1)
 
 
 def post_player_frame(root_frame, player):
     """
-    Takes a root frame which to add the graphics and a player to draw information from.
-    Args: frame (tkinter.frame), player (player class object)
+    Takes a frame which to add the graphics and a player to draw information from.
+    Args: root_frame (tkinter.frame), player (player class object)
     """
     player_frame = tk.Frame(root_frame)
-    tk.Label(player_frame, text=player.get_name(), anchor=tk.CENTER).grid(row=0, columnspan=3, sticky=tk.W+tk.E)
-
-    img = Image.open("assets/norway.png")
-    img = img.resize((231,231), Image.ANTIALIAS)
-    logo = ImageTk.PhotoImage(img)
+    tk.Label(player_frame, text=player.get_name(), anchor=tk.CENTER, font=('times', 18)).grid(
+        row=0,
+        columnspan=3,
+        sticky=tk.W+tk.E
+        )
 
     i = 0
     for country in player.get_countries():
-        text = '{0} of {1}'.format(country[1], country[0])
-        tk.Label(player_frame, text=text, relief='ridge', font=('times', 12), width=25).grid(row=1, column=i)
-        img_logo = tk.Label(player_frame, image=logo, relief='ridge', width=231)
+        text = '{0} of {1}'.format(country["leader"], country["name"])
+        tk.Label(player_frame, text=text, relief='ridge', font=('times', 12), width=26).grid(row=1, column=i)
+
+        img = Image.open(country["image_path"])
+        img = img.resize((232,232), Image.ANTIALIAS)
+        logo = ImageTk.PhotoImage(img)
+
+        img_logo = tk.Label(player_frame, image=logo, width=232)
         img_logo.image = logo #Keep the image reference
         img_logo.grid(row=2, column=i)
         i += 1
@@ -99,30 +97,36 @@ def post_player_frame(root_frame, player):
     player_frame.pack(fill=tk.BOTH, expand=True, side=tk.TOP)
 
 
-# Test to create a frame format!
-player_frame = tk.Frame(root)
+def onFrameConfiguration(canvas):
+    """ Reset te scroll region to encompass the inner frame"""
+    canvas.configure(scrollregion=canvas.bbox("all"))
 
 
-player_name = "<Player names goes here>"
+# Create GUI
+import tkinter as tk
+from PIL import ImageTk, Image
 
-img = Image.open("assets/chandragupta.png")
-img = img.resize((231,231), Image.ANTIALIAS)
-resize_logo = ImageTk.PhotoImage(img)
+# Create a root frame with a set size
+root = tk.Tk()
+root.title('Civilization VI Three pool picker')
+root.geometry("725x600+50+50")
+root.resizable(0, 0)
 
-name_label = tk.Label(player_frame, text=player_name, anchor=tk.CENTER)
-name_label.grid(row=0, columnspan=3, sticky=tk.W+tk.E)
+#Create the scrollable canvas and add a mainframe to it
+canvas = tk.Canvas(root, borderwidth=0, background="#ffffff")
+main_player_frame = tk.Frame(canvas, background="#ffffff")
+scroll = tk.Scrollbar(root, orient="vertical", command=canvas.yview)
+canvas.configure(yscrollcommand=scroll.set)
 
-i = 0
-for country in players_lineup[0].get_countries():
-    text = '{0} of {1}'.format(country[1], country[0])
-    tk.Label(player_frame, text=text, relief='ridge', font=('times', 12), width=25).grid(row=1, column=i)
-    img_logo = tk.Label(player_frame, image=resize_logo, relief='ridge', width=231)
-    img_logo.image = resize_logo #keep the image reference
-    img_logo.grid(row=2, column=i)
+scroll.pack(side="right", fill="y")
+canvas.pack(side="left", fill="both", expand=True)
+canvas.create_window((0,0), window=main_player_frame, anchor="nw")
 
-    i += 1
+main_player_frame.bind("<Configure>", lambda event, canvas=canvas: onFrameConfiguration(canvas))
 
-player_frame.pack(fill=tk.BOTH, expand=True, side=tk.TOP)
+# Fill the frame with the player layout
+for player in players_lineup:
+    post_player_frame(main_player_frame, player)
 
-post_player_frame(root, players_lineup[1])
+
 root.mainloop()
