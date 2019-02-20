@@ -59,7 +59,7 @@ def get_countries(rise_and_fall=False, global_storm=False, all_expansions=False)
     Args: rise_and_fall=False, global_storm=False, all_expansions=False
     Returns, list[['name', 'name']]
     """
-    included = countries
+    included = countries.copy()
     if rise_and_fall or all_expansions:
         for e in countries_rise_and_fall:
             included.append(e)
